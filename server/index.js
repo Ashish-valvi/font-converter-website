@@ -44,7 +44,7 @@ app.post("/api/upload", (req, res) => {
 });
 
 // ✅ React fallback
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
