@@ -6,10 +6,14 @@ const fs = require("fs");
 
 const app = express();
 
+// ✅ Allow production + local
 app.use(cors());
 app.use(express.json({ limit: "20mb" }));
 
-app.post("/convert", (req, res) => {
+// ✅ IMPORTANT: serve React build
+app.use(express.static(path.join(__dirname, "client/build")));
+
+app.post("/api/convert", (req, res) => {
   const { text } = req.body;
 
   if (!text) {
@@ -17,13 +21,12 @@ app.post("/convert", (req, res) => {
   }
 
   const scriptPath = path.join(__dirname, "../python/converter.py");
-
   const inputFile = path.join(__dirname, "input.txt");
 
-  // ✅ write text exactly as-is
   fs.writeFileSync(inputFile, text, "utf-8");
 
-  const command = `python "${scriptPath}" "${inputFile}"`;
+  // ✅ FIX: use python3 for VPS
+  const command = `python3 "${scriptPath}" "${inputFile}"`;
 
   exec(command, { encoding: "utf-8", maxBuffer: 1024 * 1024 * 20 }, (error, stdout, stderr) => {
     if (error) {
@@ -35,6 +38,19 @@ app.post("/convert", (req, res) => {
   });
 });
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+// ✅ OPTIONAL: file upload route (you were missing this)
+app.post("/api/upload", (req, res) => {
+  res.send("Upload not implemented yet");
+});
+
+// ✅ React fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+});
+
+// ✅ PORT fix for production
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

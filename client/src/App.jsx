@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 function App() {
   const [mode, setMode] = useState("text");
   const [input, setInput] = useState("");
@@ -29,7 +30,7 @@ function App() {
             <button style={modal.accept} onClick={() => setAccepted(true)}>
               Accept
             </button>
-            <button style={modal.reject} onClick={() => window.close()}>
+            <button style={modal.reject} onClick={() => setAccepted(false)}>
               Reject
             </button>
           </div>
@@ -40,19 +41,26 @@ function App() {
 
   /* FUNCTIONS */
   const handleConvert = async () => {
-    if (!input) return;
-    setLoading(true);
+  if (!input) return;
+  setLoading(true);
 
-    const res = await fetch("http://localhost:5000/convert", {
+  try {
+    const res = await fetch("/api/convert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: input })
     });
 
+    if (!res.ok) throw new Error("Server error");
+
     const data = await res.json();
     setOutput(data.converted);
-    setLoading(false);
-  };
+  } catch (err) {
+    alert("Conversion failed");
+  }
+
+  setLoading(false);
+};
 
   const copyOutput = () => {
     navigator.clipboard.writeText(output);
@@ -66,23 +74,29 @@ function App() {
   };
 
   const handleFileUpload = async () => {
-    if (!file) return;
-    setLoading(true);
+  if (!file) return;
+  setLoading(true);
 
+  try {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:5000/upload", {
+    const res = await fetch("/api/upload", {
       method: "POST",
       body: formData
     });
 
+    if (!res.ok) throw new Error("Upload failed");
+
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     setDownloadUrl(url);
+  } catch (err) {
+    alert("File conversion failed");
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   return (
     <div style={theme.page}>
