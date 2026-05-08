@@ -17,6 +17,10 @@ function App() {
 
   const [copied, setCopied] = useState(false);
 
+  const [darkMode, setDarkMode] = useState(true);
+
+  const isMobile = window.innerWidth < 768;
+
   /* =========================================
      TEXT CONVERT
   ========================================= */
@@ -44,6 +48,7 @@ function App() {
       setOutput(data.converted);
 
     } catch (err) {
+
       alert("Conversion failed");
     }
 
@@ -124,7 +129,17 @@ function App() {
 
   return (
 
-    <div style={styles.page}>
+    <div
+      style={{
+        ...styles.page,
+        background: darkMode
+          ? "#020617"
+          : "#f8fafc",
+        color: darkMode
+          ? "#ffffff"
+          : "#020617"
+      }}
+    >
 
       {/* =====================================
           NAVBAR
@@ -132,11 +147,39 @@ function App() {
 
       <div style={styles.navbar}>
 
-        <div style={styles.logo}>
-          valvi.io
+        {/* LOGO */}
+
+        <div style={styles.logoWrap}>
+
+          <div style={styles.logoIcon}>
+            V
+          </div>
+
+          <div>
+
+            <div style={styles.logoText}>
+              valvi.io
+            </div>
+
+            <div style={styles.logoSub}>
+              Unicode Technology
+            </div>
+
+          </div>
+
         </div>
 
-        <div style={styles.navLinks}>
+        {/* NAVIGATION */}
+
+        <div
+          style={{
+            ...styles.navLinks,
+            width: isMobile ? "100%" : "auto",
+            justifyContent: isMobile
+              ? "center"
+              : "flex-end"
+          }}
+        >
 
           <button
             style={styles.navBtn}
@@ -159,6 +202,17 @@ function App() {
             Register
           </button>
 
+          <button
+            style={styles.navBtn}
+            onClick={() =>
+              setDarkMode(!darkMode)
+            }
+          >
+            {darkMode
+              ? "☀ Light"
+              : "🌙 Dark"}
+          </button>
+
         </div>
       </div>
 
@@ -176,21 +230,37 @@ function App() {
 
           <>
 
+            {/* HERO */}
+
             <div style={styles.hero}>
 
-              <h1 style={styles.title}>
-                Marathi Font Converter
+              <h1
+                style={{
+                  ...styles.title,
+                  fontSize: isMobile
+                    ? "58px"
+                    : "82px"
+                }}
+              >
+                Marathi Font
+                <br />
+                Converter
               </h1>
 
-              <p style={styles.subtitle}>
+              <p
+                style={{
+                  ...styles.subtitle,
+                  fontSize: isMobile
+                    ? "16px"
+                    : "24px"
+                }}
+              >
                 Convert Legacy Marathi Fonts to Unicode
               </p>
 
             </div>
 
-            {/* ============================
-                MODE SWITCH
-            ============================ */}
+            {/* MODE SWITCH */}
 
             <div style={styles.modeWrap}>
 
@@ -218,9 +288,9 @@ function App() {
 
             </div>
 
-            {/* ============================
+            {/* =====================================
                 TEXT MODE
-            ============================ */}
+            ===================================== */}
 
             {mode === "text" && (
 
@@ -230,7 +300,9 @@ function App() {
                   style={styles.textarea}
                   placeholder="Paste legacy Marathi font text..."
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) =>
+                    setInput(e.target.value)
+                  }
                 />
 
                 <div style={styles.row}>
@@ -239,7 +311,9 @@ function App() {
                     style={styles.primaryBtn}
                     onClick={handleConvert}
                   >
-                    {loading ? "Converting..." : "Convert"}
+                    {loading
+                      ? "Converting..."
+                      : "Convert"}
                   </button>
 
                   <button
@@ -277,27 +351,41 @@ function App() {
               </div>
             )}
 
-            {/* ============================
+            {/* =====================================
                 FILE MODE
-            ============================ */}
+            ===================================== */}
 
             {mode === "file" && (
 
               <div
                 style={styles.dropZone}
-                onDragOver={(e) => e.preventDefault()}
+                onDragOver={(e) =>
+                  e.preventDefault()
+                }
                 onDrop={handleDrop}
               >
 
-                <h2>Upload DOCX File</h2>
+                <h2
+                  style={{
+                    fontSize: isMobile
+                      ? "36px"
+                      : "42px"
+                  }}
+                >
+                  Upload DOCX File
+                </h2>
 
-                <p>
+                <p style={styles.uploadText}>
                   Drag & Drop or Select File
                 </p>
 
                 <input
                   type="file"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  onChange={(e) =>
+                    setFile(
+                      e.target.files[0]
+                    )
+                  }
                 />
 
                 {file && (
@@ -337,7 +425,8 @@ function App() {
 
                       a.href = downloadUrl;
 
-                      a.download = "converted.docx";
+                      a.download =
+                        "converted.docx";
 
                       a.click();
                     }}
@@ -353,21 +442,26 @@ function App() {
           </>
         )}
 
-        {/* =================================
-            ABOUT
-        ================================= */}
+        {/* ABOUT */}
 
         {page === "about" && (
 
           <div style={styles.infoCard}>
 
-            <h2>About Us</h2>
+            <h2>About valvi.io</h2>
 
             <p>
-              valvi.io provides Marathi font
-              conversion tools for Unicode,
-              document conversion and
+              valvi.io builds Unicode
+              conversion tools for Marathi,
+              Hindi and Indian language
               publishing workflows.
+            </p>
+
+            <p>
+              We provide DOCX conversion,
+              legacy font conversion,
+              Unicode migration and desktop
+              publishing tools.
             </p>
 
             <p>
@@ -377,9 +471,7 @@ function App() {
           </div>
         )}
 
-        {/* =================================
-            REGISTER
-        ================================= */}
+        {/* REGISTER */}
 
         {page === "register" && (
 
@@ -388,7 +480,8 @@ function App() {
             <h2>Register</h2>
 
             <p>
-              Registration module coming soon.
+              User registration system
+              coming soon.
             </p>
 
           </div>
@@ -396,9 +489,7 @@ function App() {
 
       </div>
 
-      {/* =====================================
-          FOOTER
-      ===================================== */}
+      {/* FOOTER */}
 
       <footer style={styles.footer}>
         © 2026 valvi.io — All Rights Reserved
@@ -416,24 +507,59 @@ const styles = {
 
   page: {
     minHeight: "100vh",
-    background: "#0f172a",
-    color: "#fff",
-    fontFamily: "Arial"
+    fontFamily:
+      "'Segoe UI', sans-serif",
+    transition: "0.3s"
   },
 
   navbar: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "16px 24px",
+    padding: "18px 24px",
     borderBottom: "1px solid #1e293b",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    gap: "16px"
   },
 
-  logo: {
-    fontSize: "28px",
-    fontWeight: "700",
-    color: "#38bdf8"
+  logoWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px"
+  },
+
+  logoIcon: {
+    width: "54px",
+    height: "54px",
+    borderRadius: "18px",
+
+    background:
+      "linear-gradient(135deg,#38bdf8,#2563eb)",
+
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+
+    fontSize: "30px",
+    fontWeight: "900",
+    color: "#fff",
+
+    boxShadow:
+      "0 0 25px rgba(56,189,248,0.4)"
+  },
+
+  logoText: {
+    fontSize: "34px",
+    fontWeight: "800",
+    color: "#38bdf8",
+    lineHeight: "34px"
+  },
+
+  logoSub: {
+    fontSize: "12px",
+    opacity: 0.7,
+    letterSpacing: "1px",
+    marginTop: "3px"
   },
 
   navLinks: {
@@ -443,156 +569,253 @@ const styles = {
   },
 
   navBtn: {
-    background: "transparent",
+    background:
+      "rgba(255,255,255,0.05)",
+
     color: "#fff",
+
     border: "1px solid #334155",
-    padding: "10px 16px",
-    borderRadius: "8px",
-    cursor: "pointer"
+
+    padding: "12px 18px",
+
+    borderRadius: "14px",
+
+    cursor: "pointer",
+
+    fontSize: "15px",
+
+    transition: "0.3s"
   },
 
   container: {
-    maxWidth: "1100px",
+    maxWidth: "1200px",
     margin: "0 auto",
-    padding: "20px"
+    padding: "24px",
+    width: "100%",
+    boxSizing: "border-box"
   },
 
   hero: {
     textAlign: "center",
-    marginBottom: "30px"
+    marginBottom: "40px",
+    marginTop: "30px"
   },
 
   title: {
-    fontSize: "42px",
-    color: "#38bdf8"
+    color: "#38bdf8",
+    lineHeight: "0.85",
+    marginBottom: "20px",
+    fontWeight: "800"
   },
 
   subtitle: {
-    opacity: 0.8
+    opacity: 0.8,
+    fontWeight: "500"
   },
 
   modeWrap: {
     display: "flex",
-    gap: "10px",
-    marginBottom: "20px",
-    flexWrap: "wrap"
+    gap: "14px",
+    marginBottom: "30px",
+    flexWrap: "wrap",
+    justifyContent: "center"
   },
 
   modeBtn: {
-    padding: "12px 18px",
-    borderRadius: "10px",
+    padding: "14px 24px",
+    borderRadius: "16px",
     border: "1px solid #334155",
-    background: "#1e293b",
+    background:
+      "rgba(255,255,255,0.06)",
     color: "#fff",
-    cursor: "pointer"
+    cursor: "pointer",
+    fontSize: "18px"
   },
 
   activeModeBtn: {
-    padding: "12px 18px",
-    borderRadius: "10px",
+    padding: "14px 24px",
+    borderRadius: "16px",
     border: "none",
     background: "#38bdf8",
     color: "#000",
     cursor: "pointer",
-    fontWeight: "700"
+    fontWeight: "700",
+    fontSize: "18px"
   },
 
   card: {
-    background: "#111827",
-    padding: "20px",
-    borderRadius: "16px"
+    background:
+      "linear-gradient(180deg,#111827,#0f172a)",
+
+    padding: "24px",
+
+    borderRadius: "24px",
+
+    border: "1px solid #1e293b",
+
+    boxShadow:
+      "0 0 30px rgba(0,0,0,0.3)"
   },
 
   textarea: {
     width: "100%",
-    height: "220px",
-    borderRadius: "12px",
+    minHeight: "260px",
+
+    borderRadius: "20px",
+
     border: "1px solid #334155",
+
     background: "#020617",
+
     color: "#fff",
-    padding: "14px",
-    fontSize: "16px",
-    resize: "vertical"
+
+    padding: "18px",
+
+    fontSize: "17px",
+
+    resize: "vertical",
+
+    boxSizing: "border-box",
+
+    outline: "none"
   },
 
   output: {
     width: "100%",
-    height: "260px",
-    borderRadius: "12px",
+    minHeight: "280px",
+
+    borderRadius: "20px",
+
     border: "1px solid #334155",
+
     background: "#020617",
+
     color: "#38bdf8",
-    padding: "14px",
-    fontSize: "16px",
+
+    padding: "18px",
+
+    fontSize: "17px",
+
     marginTop: "20px",
-    resize: "vertical"
+
+    resize: "vertical",
+
+    boxSizing: "border-box",
+
+    outline: "none"
   },
 
   row: {
     display: "flex",
-    gap: "10px",
-    marginTop: "15px",
+    gap: "14px",
+    marginTop: "20px",
     flexWrap: "wrap"
   },
 
   primaryBtn: {
     background: "#38bdf8",
+
     color: "#000",
+
     border: "none",
-    padding: "12px 18px",
-    borderRadius: "10px",
+
+    padding: "14px 24px",
+
+    borderRadius: "16px",
+
     cursor: "pointer",
-    fontWeight: "700"
+
+    fontWeight: "700",
+
+    fontSize: "17px"
   },
 
   secondaryBtn: {
-    background: "#1e293b",
+    background:
+      "rgba(255,255,255,0.05)",
+
     color: "#fff",
-    border: "1px solid #334155",
-    padding: "12px 18px",
-    borderRadius: "10px",
-    cursor: "pointer"
+
+    border: "1px solid #475569",
+
+    padding: "14px 24px",
+
+    borderRadius: "16px",
+
+    cursor: "pointer",
+
+    fontSize: "17px"
   },
 
   downloadBtn: {
-    marginTop: "20px",
+    marginTop: "24px",
+
     background: "#22c55e",
+
     color: "#fff",
+
     border: "none",
-    padding: "14px 22px",
-    borderRadius: "10px",
+
+    padding: "16px 28px",
+
+    borderRadius: "16px",
+
     cursor: "pointer",
-    fontWeight: "700"
+
+    fontWeight: "700",
+
+    fontSize: "18px"
   },
 
   dropZone: {
-    background: "#111827",
+    background:
+      "linear-gradient(180deg,#111827,#0f172a)",
+
     border: "2px dashed #38bdf8",
-    padding: "60px 20px",
+
+    padding: "80px 20px",
+
     textAlign: "center",
-    borderRadius: "16px"
+
+    borderRadius: "28px",
+
+    boxShadow:
+      "0 0 30px rgba(0,0,0,0.3)"
+  },
+
+  uploadText: {
+    fontSize: "24px",
+    marginBottom: "20px"
   },
 
   fileName: {
-    marginTop: "14px",
-    color: "#38bdf8"
+    marginTop: "18px",
+    color: "#38bdf8",
+    fontSize: "18px"
   },
 
   success: {
     color: "#22c55e",
-    marginTop: "10px"
+    marginTop: "12px",
+    fontWeight: "600"
   },
 
   infoCard: {
-    background: "#111827",
-    padding: "30px",
-    borderRadius: "16px"
+    background:
+      "linear-gradient(180deg,#111827,#0f172a)",
+
+    padding: "40px",
+
+    borderRadius: "24px",
+
+    border: "1px solid #1e293b"
   },
 
   footer: {
     textAlign: "center",
-    padding: "30px",
-    opacity: 0.7
+    padding: "40px",
+    opacity: 0.7,
+    fontSize: "18px"
   }
 };
 
