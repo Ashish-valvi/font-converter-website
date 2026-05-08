@@ -167,7 +167,7 @@ function App() {
               valvi.io
             </div>
 
-            <div
+            {/* <div
               style={{
                 ...styles.logoSub,
 
@@ -177,7 +177,7 @@ function App() {
               }}
             >
               Unicode Technology
-            </div>
+            </div> */}
 
           </div>
 
@@ -522,7 +522,7 @@ function App() {
             </h2>
 
             <p style={styles.aboutText}>
-              .AV Converter 1.1.2
+              AV Font Converter 1.1.2
             </p>
 
             <p style={styles.aboutText}>
