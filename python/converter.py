@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import sys
 import os
+import codecs
 
 
 
@@ -51,8 +53,8 @@ if __name__ == "__main__":
 
     file_path = sys.argv[1]
 
-    with open(file_path, "r") as f:
+    with codecs.open(file_path, "r", "utf-8") as f:
 
         input_text = f.read()
 
-    print(convert_text(input_text))
+    print(convert_text(input_text).encode("utf-8"))
