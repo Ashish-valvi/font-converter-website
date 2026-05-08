@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.stdout.reconfigure(encoding='utf-8')
+
 
 sys.path.append(
     os.path.abspath(
