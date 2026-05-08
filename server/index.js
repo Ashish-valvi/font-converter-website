@@ -202,9 +202,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
 /* ================= HEALTH ================= */
 
-app.get("/", (req, res) => {
-  res.send("AV Font Converter API Running");
-});
+
 
 /* ================= START ================= */
 
