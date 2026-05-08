@@ -1,0 +1,8 @@
+node_modules
+dist
+uploads
+outputs
+.env
+*.pyc
+__pycache__
+indic2unicode

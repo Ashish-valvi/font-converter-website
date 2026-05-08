@@ -3,54 +3,211 @@ const cors = require("cors");
 const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
+const crypto = require("crypto");
 
 const app = express();
 
-// ✅ Allow production + local
+/* ================= CONFIG ================= */
+
+const PORT = 5000;
+
+// ✅ Normal Python now (NO UNO)
+const PYTHON_CMD =
+  process.platform === "win32"
+    ? "python"
+    : "python3";
+
+// ✅ Folders
+const uploadsDir = path.join(__dirname, "uploads");
+const outputsDir = path.join(__dirname, "outputs");
+
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+if (!fs.existsSync(outputsDir)) {
+  fs.mkdirSync(outputsDir);
+}
+
 app.use(cors());
-app.use(express.json({ limit: "20mb" }));
 
-// ✅ IMPORTANT: serve React build
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use(
+  express.json({
+    limit: "20mb"
+  })
+);
 
-app.post("/api/convert", (req, res) => {
-  const { text } = req.body;
+/* ================= MULTER ================= */
 
-  if (!text) {
-    return res.status(400).json({ error: "Text required" });
+const upload = multer({
+  dest: uploadsDir,
+
+  limits: {
+    fileSize: 20 * 1024 * 1024
+  },
+
+  fileFilter: (req, file, cb) => {
+    const allowedMime =
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+    if (file.mimetype === allowedMime) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only DOCX files are allowed"));
+    }
   }
+});
 
-  const scriptPath = path.join(__dirname, "../python/converter.py");
-  const inputFile = path.join(__dirname, "input.txt");
+/* ================= TEXT API ================= */
 
-  fs.writeFileSync(inputFile, text, "utf-8");
+app.post("/convert", (req, res) => {
+  try {
+    const { text } = req.body;
 
-  // ✅ FIX: use python3 for VPS
-  const command = `python3 "${scriptPath}" "${inputFile}"`;
-
-  exec(command, { encoding: "utf-8", maxBuffer: 1024 * 1024 * 20 }, (error, stdout, stderr) => {
-    if (error) {
-      console.error(stderr);
-      return res.status(500).json({ error: "Conversion failed" });
+    if (!text) {
+      return res.status(400).json({
+        error: "Text is required"
+      });
     }
 
-    res.json({ converted: stdout.trim() });
-  });
+    const id = crypto.randomUUID();
+
+    const inputFile = path.join(
+      outputsDir,
+      `input_${id}.txt`
+    );
+
+    fs.writeFileSync(inputFile, text, "utf-8");
+
+    const scriptPath = path.join(
+      __dirname,
+      "../python/converter.py"
+    );
+
+    exec(
+      `${PYTHON_CMD} "${scriptPath}" "${inputFile}"`,
+      {
+        encoding: "utf-8",
+        maxBuffer: 1024 * 1024 * 20,
+        timeout: 1000 * 60 * 2
+      },
+      (err, stdout, stderr) => {
+
+        if (fs.existsSync(inputFile)) {
+          fs.unlinkSync(inputFile);
+        }
+
+        if (err) {
+          console.error(stderr);
+
+          return res.status(500).json({
+            error: "Text conversion failed"
+          });
+        }
+
+        res.json({
+          converted: stdout.trim()
+        });
+      }
+    );
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Server error"
+    });
+  }
 });
 
-// ✅ OPTIONAL: file upload route (you were missing this)
-app.post("/api/upload", (req, res) => {
-  res.send("Upload not implemented yet");
+/* ================= FILE API ================= */
+
+app.post("/upload", upload.single("file"), (req, res) => {
+
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({
+        error: "No file uploaded"
+      });
+    }
+
+    // ✅ add extension
+    const inputPath = req.file.path + ".docx";
+
+    fs.renameSync(req.file.path, inputPath);
+
+    const outputPath = path.join(
+      outputsDir,
+      `converted_${Date.now()}.docx`
+    );
+
+    const scriptPath = path.join(
+      __dirname,
+      "../python/convert_docx.py"
+    );
+
+    exec(
+      `${PYTHON_CMD} "${scriptPath}" "${inputPath}" "${outputPath}"`,
+      {
+        encoding: "utf-8",
+        maxBuffer: 1024 * 1024 * 50,
+        timeout: 1000 * 60 * 5
+      },
+      (err, stdout, stderr) => {
+
+        console.log(stdout);
+
+        // cleanup uploaded file
+        if (fs.existsSync(inputPath)) {
+          fs.unlinkSync(inputPath);
+        }
+
+        if (err) {
+
+          console.error(stderr);
+
+          return res.status(500).json({
+            error: "DOCX conversion failed"
+          });
+        }
+
+        res.download(
+          outputPath,
+          "converted.docx",
+          (downloadErr) => {
+
+            if (fs.existsSync(outputPath)) {
+              fs.unlinkSync(outputPath);
+            }
+
+            if (downloadErr) {
+              console.error(downloadErr);
+            }
+          }
+        );
+      }
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      error: "Server error"
+    });
+  }
 });
 
-// ✅ React fallback
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
+/* ================= HEALTH ================= */
+
+app.get("/", (req, res) => {
+  res.send("AV Font Converter API Running");
 });
 
-// ✅ PORT fix for production
-const PORT = process.env.PORT || 5000;
+/* ================= START ================= */
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
