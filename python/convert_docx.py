@@ -42,7 +42,7 @@ ns = {
 }
 
 # =====================================================
-# PROCESS XML
+# PROCESS XML FILES
 # =====================================================
 
 for xml_file in xml_files:
@@ -68,7 +68,10 @@ for xml_file in xml_files:
             if not text_nodes:
                 continue
 
-            # collect full paragraph text
+            # =========================================
+            # COMBINE COMPLETE PARAGRAPH
+            # =========================================
+
             combined_text = ""
 
             for node in text_nodes:
@@ -81,30 +84,45 @@ for xml_file in xml_files:
 
             try:
 
-                # convert FULL paragraph
+                # =====================================
+                # CONVERT FULL PARAGRAPH
+                # =====================================
+
                 converted = convert_text(combined_text)
 
-                # put converted text in first node
+                # =====================================
+                # PUT RESULT IN FIRST NODE
+                # =====================================
+
                 text_nodes[0].text = converted
 
-                # clear remaining nodes
+                # =====================================
+                # CLEAR OTHER NODES
+                # =====================================
+
                 for extra_node in text_nodes[1:]:
+
                     extra_node.text = ""
 
             except Exception as e:
-                print("PARAGRAPH ERROR:", e)
 
-        # save XML
+                print("PARAGRAPH ERROR: " + str(e))
+
+        # =============================================
+        # SAVE XML
+        # =============================================
+
         tree.write(
             full_path,
             encoding="utf-8",
             xml_declaration=True
         )
 
-        print(f"Processed: {xml_file}")
+        print("Processed: " + xml_file)
 
     except Exception as e:
-        print(f"ERROR in {xml_file}: {e}")
+
+        print("ERROR in " + xml_file + ": " + str(e))
 
 # =====================================================
 # REBUILD DOCX
