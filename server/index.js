@@ -202,7 +202,22 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
 /* ================= HEALTH ================= */
 
+app.use(
+  express.static(
+    path.join(__dirname, "../client/dist")
+  )
+);
 
+app.get("*", (req, res) => {
+
+  res.sendFile(
+    path.join(
+      __dirname,
+      "../client/dist/index.html"
+    )
+  );
+
+});
 
 /* ================= START ================= */
 
