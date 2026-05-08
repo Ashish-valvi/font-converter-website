@@ -132,12 +132,14 @@ function App() {
     <div
       style={{
         ...styles.page,
+
         background: darkMode
           ? "#020617"
-          : "#f8fafc",
+          : "#f1f5f9",
+
         color: darkMode
           ? "#ffffff"
-          : "#020617"
+          : "#0f172a"
       }}
     >
 
@@ -145,15 +147,19 @@ function App() {
           NAVBAR
       ===================================== */}
 
-      <div style={styles.navbar}>
+      <div
+        style={{
+          ...styles.navbar,
+
+          background: darkMode
+            ? "#020617"
+            : "#ffffff"
+        }}
+      >
 
         {/* LOGO */}
 
         <div style={styles.logoWrap}>
-
-          <div style={styles.logoIcon}>
-            V
-          </div>
 
           <div>
 
@@ -161,7 +167,15 @@ function App() {
               valvi.io
             </div>
 
-            <div style={styles.logoSub}>
+            <div
+              style={{
+                ...styles.logoSub,
+
+                color: darkMode
+                  ? "#94a3b8"
+                  : "#475569"
+              }}
+            >
               Unicode Technology
             </div>
 
@@ -192,14 +206,7 @@ function App() {
             style={styles.navBtn}
             onClick={() => setPage("about")}
           >
-            About Us
-          </button>
-
-          <button
-            style={styles.navBtn}
-            onClick={() => setPage("register")}
-          >
-            Register
+            About
           </button>
 
           <button
@@ -238,8 +245,8 @@ function App() {
                 style={{
                   ...styles.title,
                   fontSize: isMobile
-                    ? "58px"
-                    : "82px"
+                    ? "52px"
+                    : "90px"
                 }}
               >
                 Marathi Font
@@ -250,8 +257,13 @@ function App() {
               <p
                 style={{
                   ...styles.subtitle,
+
+                  color: darkMode
+                    ? "#cbd5e1"
+                    : "#475569",
+
                   fontSize: isMobile
-                    ? "16px"
+                    ? "18px"
                     : "24px"
                 }}
               >
@@ -294,10 +306,28 @@ function App() {
 
             {mode === "text" && (
 
-              <div style={styles.card}>
+              <div
+                style={{
+                  ...styles.card,
+
+                  background: darkMode
+                    ? "linear-gradient(180deg,#111827,#0f172a)"
+                    : "#ffffff"
+                }}
+              >
 
                 <textarea
-                  style={styles.textarea}
+                  style={{
+                    ...styles.textarea,
+
+                    background: darkMode
+                      ? "#020617"
+                      : "#f8fafc",
+
+                    color: darkMode
+                      ? "#ffffff"
+                      : "#0f172a"
+                  }}
                   placeholder="Paste legacy Marathi font text..."
                   value={input}
                   onChange={(e) =>
@@ -342,7 +372,17 @@ function App() {
                 )}
 
                 <textarea
-                  style={styles.output}
+                  style={{
+                    ...styles.output,
+
+                    background: darkMode
+                      ? "#020617"
+                      : "#f8fafc",
+
+                    color: darkMode
+                      ? "#38bdf8"
+                      : "#0284c7"
+                  }}
                   placeholder="Unicode output..."
                   value={output}
                   readOnly
@@ -358,24 +398,40 @@ function App() {
             {mode === "file" && (
 
               <div
-                style={styles.dropZone}
+                style={{
+                  ...styles.dropZone,
+
+                  background: darkMode
+                    ? "linear-gradient(180deg,#111827,#0f172a)"
+                    : "#ffffff"
+                }}
+
                 onDragOver={(e) =>
                   e.preventDefault()
                 }
+
                 onDrop={handleDrop}
               >
 
                 <h2
                   style={{
                     fontSize: isMobile
-                      ? "36px"
+                      ? "34px"
                       : "42px"
                   }}
                 >
                   Upload DOCX File
                 </h2>
 
-                <p style={styles.uploadText}>
+                <p
+                  style={{
+                    ...styles.uploadText,
+
+                    color: darkMode
+                      ? "#cbd5e1"
+                      : "#475569"
+                  }}
+                >
                   Drag & Drop or Select File
                 </p>
 
@@ -446,42 +502,35 @@ function App() {
 
         {page === "about" && (
 
-          <div style={styles.infoCard}>
+          <div
+            style={{
+              ...styles.infoCard,
 
-            <h2>About valvi.io</h2>
+              background: darkMode
+                ? "linear-gradient(180deg,#111827,#0f172a)"
+                : "#ffffff"
+            }}
+          >
 
-            <p>
-              valvi.io builds Unicode
-              conversion tools for Marathi,
-              Hindi and Indian language
-              publishing workflows.
+            <h2
+              style={{
+                fontSize: "42px",
+                marginBottom: "30px"
+              }}
+            >
+              About
+            </h2>
+
+            <p style={styles.aboutText}>
+              .AV Converter 1.1.2
             </p>
 
-            <p>
-              We provide DOCX conversion,
-              legacy font conversion,
-              Unicode migration and desktop
-              publishing tools.
+            <p style={styles.aboutText}>
+              Developer - Aashish Valvi
             </p>
 
-            <p>
-              Developed by Ashish Valvi
-            </p>
-
-          </div>
-        )}
-
-        {/* REGISTER */}
-
-        {page === "register" && (
-
-          <div style={styles.infoCard}>
-
-            <h2>Register</h2>
-
-            <p>
-              User registration system
-              coming soon.
+            <p style={styles.aboutText}>
+              Contact Us - contact@valvi.io
             </p>
 
           </div>
@@ -491,7 +540,15 @@ function App() {
 
       {/* FOOTER */}
 
-      <footer style={styles.footer}>
+      <footer
+        style={{
+          ...styles.footer,
+
+          color: darkMode
+            ? "#94a3b8"
+            : "#475569"
+        }}
+      >
         © 2026 valvi.io — All Rights Reserved
       </footer>
 
@@ -516,75 +573,49 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "18px 24px",
+    padding: "22px 28px",
     borderBottom: "1px solid #1e293b",
     flexWrap: "wrap",
-    gap: "16px"
+    gap: "16px",
+
+    position: "sticky",
+    top: 0,
+    zIndex: 100
   },
 
   logoWrap: {
     display: "flex",
-    alignItems: "center",
-    gap: "12px"
-  },
-
-  logoIcon: {
-    width: "54px",
-    height: "54px",
-    borderRadius: "18px",
-
-    background:
-      "linear-gradient(135deg,#38bdf8,#2563eb)",
-
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-
-    fontSize: "30px",
-    fontWeight: "900",
-    color: "#fff",
-
-    boxShadow:
-      "0 0 25px rgba(56,189,248,0.4)"
+    alignItems: "center"
   },
 
   logoText: {
-    fontSize: "34px",
-    fontWeight: "800",
+    fontSize: "52px",
+    fontWeight: "900",
     color: "#38bdf8",
-    lineHeight: "34px"
+    lineHeight: "50px"
   },
 
   logoSub: {
-    fontSize: "12px",
-    opacity: 0.7,
-    letterSpacing: "1px",
-    marginTop: "3px"
+    fontSize: "14px",
+    marginTop: "6px",
+    letterSpacing: "1px"
   },
 
   navLinks: {
     display: "flex",
-    gap: "10px",
+    gap: "12px",
     flexWrap: "wrap"
   },
 
   navBtn: {
-    background:
-      "rgba(255,255,255,0.05)",
-
-    color: "#fff",
-
+    background: "#1e293b",
+    color: "#ffffff",
     border: "1px solid #334155",
-
-    padding: "12px 18px",
-
+    padding: "12px 20px",
     borderRadius: "14px",
-
     cursor: "pointer",
-
-    fontSize: "15px",
-
-    transition: "0.3s"
+    fontSize: "16px",
+    fontWeight: "600"
   },
 
   container: {
@@ -598,19 +629,18 @@ const styles = {
   hero: {
     textAlign: "center",
     marginBottom: "40px",
-    marginTop: "30px"
+    marginTop: "40px"
   },
 
   title: {
     color: "#38bdf8",
     lineHeight: "0.85",
-    marginBottom: "20px",
-    fontWeight: "800"
+    marginBottom: "22px",
+    fontWeight: "900"
   },
 
   subtitle: {
-    opacity: 0.8,
-    fontWeight: "500"
+    fontWeight: "600"
   },
 
   modeWrap: {
@@ -622,165 +652,107 @@ const styles = {
   },
 
   modeBtn: {
-    padding: "14px 24px",
-    borderRadius: "16px",
+    padding: "14px 26px",
+    borderRadius: "18px",
     border: "1px solid #334155",
-    background:
-      "rgba(255,255,255,0.06)",
-    color: "#fff",
+    background: "#1e293b",
+    color: "#ffffff",
     cursor: "pointer",
-    fontSize: "18px"
+    fontSize: "18px",
+    fontWeight: "600"
   },
 
   activeModeBtn: {
-    padding: "14px 24px",
-    borderRadius: "16px",
+    padding: "14px 26px",
+    borderRadius: "18px",
     border: "none",
     background: "#38bdf8",
     color: "#000",
     cursor: "pointer",
-    fontWeight: "700",
+    fontWeight: "800",
     fontSize: "18px"
   },
 
   card: {
-    background:
-      "linear-gradient(180deg,#111827,#0f172a)",
-
-    padding: "24px",
-
-    borderRadius: "24px",
-
+    padding: "26px",
+    borderRadius: "28px",
     border: "1px solid #1e293b",
-
     boxShadow:
-      "0 0 30px rgba(0,0,0,0.3)"
+      "0 0 40px rgba(0,0,0,0.12)"
   },
 
   textarea: {
     width: "100%",
     minHeight: "260px",
-
-    borderRadius: "20px",
-
+    borderRadius: "22px",
     border: "1px solid #334155",
-
-    background: "#020617",
-
-    color: "#fff",
-
     padding: "18px",
-
     fontSize: "17px",
-
     resize: "vertical",
-
     boxSizing: "border-box",
-
     outline: "none"
   },
 
   output: {
     width: "100%",
     minHeight: "280px",
-
-    borderRadius: "20px",
-
+    borderRadius: "22px",
     border: "1px solid #334155",
-
-    background: "#020617",
-
-    color: "#38bdf8",
-
     padding: "18px",
-
     fontSize: "17px",
-
     marginTop: "20px",
-
     resize: "vertical",
-
     boxSizing: "border-box",
-
     outline: "none"
   },
 
   row: {
     display: "flex",
     gap: "14px",
-    marginTop: "20px",
+    marginTop: "22px",
     flexWrap: "wrap"
   },
 
   primaryBtn: {
     background: "#38bdf8",
-
     color: "#000",
-
     border: "none",
-
     padding: "14px 24px",
-
-    borderRadius: "16px",
-
+    borderRadius: "18px",
     cursor: "pointer",
-
-    fontWeight: "700",
-
+    fontWeight: "800",
     fontSize: "17px"
   },
 
   secondaryBtn: {
-    background:
-      "rgba(255,255,255,0.05)",
-
-    color: "#fff",
-
+    background: "#1e293b",
+    color: "#ffffff",
     border: "1px solid #475569",
-
     padding: "14px 24px",
-
-    borderRadius: "16px",
-
+    borderRadius: "18px",
     cursor: "pointer",
-
     fontSize: "17px"
   },
 
   downloadBtn: {
     marginTop: "24px",
-
     background: "#22c55e",
-
     color: "#fff",
-
     border: "none",
-
     padding: "16px 28px",
-
-    borderRadius: "16px",
-
+    borderRadius: "18px",
     cursor: "pointer",
-
-    fontWeight: "700",
-
+    fontWeight: "800",
     fontSize: "18px"
   },
 
   dropZone: {
-    background:
-      "linear-gradient(180deg,#111827,#0f172a)",
-
     border: "2px dashed #38bdf8",
-
     padding: "80px 20px",
-
     textAlign: "center",
-
     borderRadius: "28px",
-
     boxShadow:
-      "0 0 30px rgba(0,0,0,0.3)"
+      "0 0 40px rgba(0,0,0,0.12)"
   },
 
   uploadText: {
@@ -791,31 +763,35 @@ const styles = {
   fileName: {
     marginTop: "18px",
     color: "#38bdf8",
-    fontSize: "18px"
+    fontSize: "18px",
+    fontWeight: "700"
   },
 
   success: {
     color: "#22c55e",
     marginTop: "12px",
-    fontWeight: "600"
+    fontWeight: "700"
   },
 
   infoCard: {
-    background:
-      "linear-gradient(180deg,#111827,#0f172a)",
-
     padding: "40px",
+    borderRadius: "28px",
+    border: "1px solid #1e293b",
+    boxShadow:
+      "0 0 40px rgba(0,0,0,0.12)"
+  },
 
-    borderRadius: "24px",
-
-    border: "1px solid #1e293b"
+  aboutText: {
+    fontSize: "22px",
+    marginBottom: "18px",
+    lineHeight: "1.7"
   },
 
   footer: {
     textAlign: "center",
     padding: "40px",
-    opacity: 0.7,
-    fontSize: "18px"
+    fontSize: "18px",
+    fontWeight: "600"
   }
 };
 
