@@ -42,8 +42,8 @@ function App() {
   const handleConvert = async () => {
     if (!input) return;
     setLoading(true);
-
-    const res = await fetch("http://localhost:5000/convert", {
+    // const res = await fetch("http://localhost:5000/convert", {
+    const res = await fetch("/convert", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: input })
@@ -72,7 +72,8 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:5000/upload", {
+      // const res = await fetch("http://localhost:5000/upload", {
+    const res = await fetch("/upload", {
       method: "POST",
       body: formData
     });
