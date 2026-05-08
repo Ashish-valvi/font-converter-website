@@ -16,7 +16,7 @@ const PORT = 5000;
 const PYTHON_CMD =
   process.platform === "win32"
     ? "python"
-    : "python3";
+    : "python2";
 
 // ✅ Folders
 const uploadsDir = path.join(__dirname, "uploads");
